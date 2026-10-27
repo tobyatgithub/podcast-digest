@@ -11,7 +11,7 @@
 
 一个跑在 AI Agent 里的 skill。你只说一句 `/podcast-digest <URL>`，agent 负责剩下的：下载 → 转写 → 精读 → 成稿 → 硬校验。
 
-**支持输入**：小宇宙 · YouTube · B站（含 b23.tv 短链、充电专属视频）· 一切 yt-dlp 支持的站点 · 本地音视频文件
+**支持输入**：小宇宙 · YouTube · B站（含 b23.tv 短链、充电专属视频）· X · 小红书 · 本地音视频文件——一切 yt-dlp 支持的站点基本都能吃，大部分实测开箱即用
 
 ---
 
@@ -210,6 +210,8 @@ podcast-digest/
 ## FAQ
 
 **需要任何 API key 吗？** 不需要。ASR 本地跑 whisper.cpp，下载靠 yt-dlp，内容生成用 agent 自身的模型。
+
+**X / 小红书的链接也能吃吗？** 能，实测可用。只要 yt-dlp 支持的站点基本都行；部分站点风控变化快，报 412/403 时 skill 会自动拉最新 yt-dlp standalone 重试。
 
 **只支持 macOS 吗？** 实战验证在 macOS（whisper.cpp + Metal，约 1-3x 实时）。Linux / Windows 理论可用（whisper.cpp 有对应后端），未验证。
 

@@ -2,7 +2,7 @@
 name: podcast-digest
 description: |
   播客/视频摘要生成工具。从媒体 URL 下载音频，转写文字，生成结构化摘要（Summary / Highlights / Key Quotes / Takeaways / Transcript）。
-  支持小宇宙（xiaoyuzhoufm.com）、YouTube、B站（bilibili.com / b23.tv）及一切 yt-dlp 支持的站点。
+  支持小宇宙（xiaoyuzhoufm.com）、YouTube、B站（bilibili.com / b23.tv）及一切 yt-dlp 支持的站点（X、小红书等已实测可用）。
   当用户说 "/podcast-digest"、处理播客、生成播客摘要、播客总结时使用。
 user-invocable: true
 ---
@@ -36,7 +36,7 @@ user-invocable: true
 
 1. 判断 URL 来源（三通道）：
    - **小宇宙**（`xiaoyuzhoufm.com`）：web-reader 抓页面 + curl 下载音频
-   - **yt-dlp 通道**（YouTube、B站 `bilibili.com` / `b23.tv`、及 yt-dlp 支持的一切站点）：统一用 `yt-dlp` 提取元数据和音频
+   - **yt-dlp 通道**（YouTube、B站 `bilibili.com` / `b23.tv`、X、小红书、及 yt-dlp 支持的一切站点）：统一用 `yt-dlp` 提取元数据和音频
    - **本地文件**：用户提供音视频路径时跳过下载，直接进 Step 2
 2. 根据 URL 类型提取元数据：
 
