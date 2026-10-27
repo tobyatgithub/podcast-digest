@@ -1,0 +1,17 @@
+{
+  "name": "podcast-digest",
+  "version": "1.0.0",
+  "description": "AI agent skill: podcast/video URL → timestamped transcript + author-grade structured digest (xiaoyuzhoufm / YouTube / Bilibili / any yt-dlp site)",
+  "type": "module",
+  "scripts": {
+    "validate": "node scripts/validate-episode.mjs"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tobyatgithub/podcast-digest.git"
+  }
+}
