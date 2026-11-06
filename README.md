@@ -2,7 +2,7 @@
 
 > **Turn any podcast / video URL into a timestamped transcript + author-grade structured digest — in one self-contained Markdown file.**
 >
-> 输入一个 URL，输出一份自包含的精读笔记：**精确到句的时间戳逐字稿** + **AI 通读全文后写成的** Summary / Highlights / 金句 / Takeaways / 章节地图。
+> 输入一个 URL，输出一份自包含的精读笔记：**精确到句的时间戳逐字稿** + **AI 通读全文后写成的** Summary / Highlights / 金句 / Takeaways / 章节地图，外加一篇可直接发 X 的中文叙事长帖。
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow)
 ![ASR](https://img.shields.io/badge/ASR-whisper.cpp%20·%20Metal-8A2BE2)
@@ -52,7 +52,7 @@ flowchart TD
     CLEAN --> SEGS["📦 seg_XXX/<br/>segments.json · meta.json · transcript.txt"]
 
     SEGS --> READ["Step 3 · AI 通读全部逐字稿<br/>全文精读，非分段拼装"]
-    READ --> GEN["作者化产出<br/>Summary · Highlights · Quotes<br/>Takeaways · Topics · Chapters"]
+    READ --> GEN["作者化产出<br/>Summary · Highlights · Quotes<br/>Takeaways · Topics · Chapters<br/>中文叙事长帖"]
     SEGS -->|"仅英文素材"| TRANS["逐句翻译 1:1<br/>+ 末段截断自查"]
 
     GEN --> ASM["Step 4 · 组装 frontmatter Markdown<br/>原始 transcript 原样写入 · 时间戳零损耗"]
@@ -104,6 +104,7 @@ Summary / Highlights / Quotes / Takeaways 必须在**通读全部逐字稿**的�
 - **Highlights 四件套**：`title`（小标签）+ `thesis`（**一句话论点**，优先借用讲者最锐利的原话）+ `content`（100-200 字忠实展开，事实必须来自逐字稿）+ `time`（定位到音频位置）
 - **Quotes** 逐字引用，Whisper 同音字错字先校正再引（小黄叔→小红书、拟据理论→拟剧理论……）
 - **语言方向**：中文素材纯中文输出；英文素材全字段中英成对 + transcript 逐句 1:1 翻译（严格不跨段吸收，防时间戳错位）
+- **X 叙事长帖**：在结构化字段之外，独立重写 1200–2500 字中文故事（开场必须是现场，按主题张力推进，金句嵌进叙述）。禁止把 highlights 拼接成推文，也禁止在正文里提 skill / 转写 / 网站。另存 `*-x-narrative.md` 方便直接粘贴
 
 ## 输出格式
 
@@ -118,6 +119,7 @@ duration: "91 min"
 language: en
 summary: "..."            # 首句 = 可独立成立的导语
 summaryZh: "..."          # 仅英文素材
+narrative / narrativeZh: |  # 中文 X 叙事长帖（英素材用 narrativeZh）
 highlights:
   - title: "..."
     thesis: "一句话论点，讲者最锐利的原话优先"
@@ -218,6 +220,8 @@ podcast-digest/
 **一期 60 分钟播客要跑多久？** 有平台字幕时几分钟（跳过转写）；走 Whisper 路径转写约 20-60 分钟（Metal），其余步骤取决于 agent 速度。
 
 **中文内容效果如何？** 中文是第一公民：小宇宙 / B站全程中文输出，精读、金句校正都按中文语感打磨。
+
+**输出能直接当推文吗？** 能。除了给网站用的结构化字段，还会独立写一篇 1200–2500 字的中文叙事长帖（`narrative` / `narrativeZh`），并另存 `*-x-narrative.md`。短主帖和长叙事不要混在一篇里。
 
 ## License
 

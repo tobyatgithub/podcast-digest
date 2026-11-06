@@ -14,6 +14,10 @@ chapters:
     title: "{chapter_title}"
 summary: "{中文素材：中文摘要 / 英文素材：English summary}"
 summaryZh: "{仅英文素材：中文摘要}"
+narrative: |
+  {仅中文素材：1200-2500字、娓娓道来的 X 长帖}
+narrativeZh: |
+  {仅英文素材：中文 X 长帖}
 highlights:
   - title: "{highlight_title}"
     titleZh: "{仅英文素材}"

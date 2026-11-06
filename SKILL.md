@@ -1,9 +1,9 @@
 ---
 name: podcast-digest
 description: |
-  播客/视频摘要生成工具。从媒体 URL 下载音频，转写文字，生成结构化摘要（Summary / Highlights / Key Quotes / Takeaways / Transcript）。
+  播客/视频摘要生成工具。从媒体 URL 下载音频，转写文字，生成结构化摘要（Summary / Highlights / Key Quotes / Takeaways / Transcript），以及一篇可直接发 X 的中文叙事长帖。
   支持小宇宙（xiaoyuzhoufm.com）、YouTube、B站（bilibili.com / b23.tv）及一切 yt-dlp 支持的站点（X、小红书等已实测可用）。
-  当用户说 "/podcast-digest"、处理播客、生成播客摘要、播客总结时使用。
+  当用户说 "/podcast-digest"、处理播客、生成播客摘要、播客总结、写成一篇娓娓道来的推文时使用。
 user-invocable: true
 ---
 
@@ -15,6 +15,7 @@ user-invocable: true
 
 - 用户说 `/podcast-digest <URL>`
 - 用户说 "处理这个播客"、"生成播客摘要"、"总结这期播客"
+- 用户说 "写成一篇娓娓道来的推文"、"出一版叙事长帖"
 
 ## 用法
 
@@ -311,10 +312,20 @@ transcript:
 - **Actionable Takeaways**：5-7 条行动建议
 - **Keywords & Topics**：8-10 个关键词，每个带一句话 description（**禁止空字符串**——没内容就删掉整个 entry）
 - **Chapter Breakdown**：`chapters`（时间戳+标题）+ `chapterDetails`（每章 2-3 句解说）；素材无章节标记时按内容主题自行划分
+- **X 叙事长帖（narrative）**：面向发 X，不是再摘要一遍 highlights。在通读全文之后**独立重写**一篇能一口气读完的中文故事，禁止把 highlights / takeaways 首尾相接充数。这个形制参考的是能被收藏、愿意读完的长帖（现场开场、按主题张力推进、金句嵌进故事），不是 140–280 字短主帖，也不是「本期要点」清单。
+  - 中文素材写入 `narrative`；英文素材写入 `narrativeZh`（X 上发中文；不必再写一篇英文长叙事）
+  - 篇幅约 1200–2500 字，用 X 长帖 / note tweet
+  - **开场必须是现场**：一个具体时刻、动作或对话（几点钟发生了什么、谁先说了哪句），让人想继续往下看。禁止「这期播客讲了」「我听完总结如下」「用 AI 整理了」这类元开场
+  - 正文不要出现 skill 名、转写、whisper、tobysguide、「完整笔记见网站」——那些只放进 X 首评（原片链接 + 若已发布则放期页）
+  - 用一两句交代讲者 / 主持人是谁，钩子之后再用两三句预告：大家最想听的是什么、对方没正面回答什么、真正值得听下去的是什么
+  - 然后按**主题张力**分 3–5 个小标题（用【】），不要按时间轴记流水账；每个小标题里用「谁问、谁答、举了什么例子」往前推，保留具体人名、数字、类比和反转
+  - 事实必须来自逐字稿，不脑补；金句嵌进叙述，不要单独列「金句清单」
+  - 语气像跟朋友讲刚听完的一集：有人感、娓娓道来，可以有判断，但不说教、不写成方法论提纲
+  - 另外写一份可直接粘贴的纯文本 sibling：`./episodes/{date}-{slug}-x-narrative.md`（不要 YAML）。文末用 HTML 注释标「首评建议」和原片 URL
 
 **Whisper/字幕错字校正：** 精读时同步校正同音字错误，校正后的写法进入所有结构化字段（transcript 按惯例保留原样）。高频坑：小黄叔→小红书、黑客风→黑客松、一成设置→议程设置、拟据理论→拟剧理论、看错能力→扛错能力、变线→变现、玩播率→完播率。专名以 Step 1 元数据里的简介/参考文献为准。
 
-**语言方向（不变）：** 中文素材纯中文、不产出任何 `*Zh` 字段；英文素材双语（`title/thesis/content` + `*Zh` 成对）；Quotes 保留素材原语言。
+**语言方向（不变）：** 中文素材纯中文、不产出任何 `*Zh` 字段；英文素材双语（`title/thesis/content` + `*Zh` 成对）；Quotes 保留素材原语言。叙事长帖例外：英文素材只强制写 `narrativeZh`，不必再写英文 `narrative`。
 
 #### 3c. Transcript 翻译（仅英文素材，分段处理）
 
@@ -363,6 +374,10 @@ chapters:
     title: "章节标题"
 summary: "{English summary}"
 summaryZh: "{中文摘要}"
+narrative: |
+  {仅中文素材：1200-2500字、娓娓道来的 X 长帖；用 YAML 字面块，不要挤成一行}
+narrativeZh: |
+  {仅英文素材：中文 X 长帖}
 highlights:
   - title: "English title"
     titleZh: "中文标题"
@@ -422,6 +437,8 @@ transcript:
 **输出路径：** 默认写到当前工作目录的 `./episodes/` 下（不存在则创建），或用户指定的目录
 **文件名：** `{date}-{slug}.md`，slug 为标题的简短英文或拼音
 
+**叙事长帖 sibling：** 与 episode 文件同目录再写 `{date}-{slug}-x-narrative.md`，正文就是可粘贴的中文长帖（不要包 YAML）。网站 / RAG 继续只消费 episode 的结构化字段；发 X 时用这份 sibling。
+
 **（可选）归档一份自包含笔记到个人知识库：** 在你的笔记库（Obsidian / Notion / 任意 Markdown 库）按主题归档时，写一份**自包含可读笔记**：标题、来源 URL、摘要、highlights/quotes/takeaways/topics、参考文献（如有），**外加段落版逐字稿**——把分段 segments 合并成段落（约 200 字/段，Whisper 输出无标点故按累计字数切分），有章节元数据时在对应位置插入 `### {time} {章节名}` 小节标题。精确时间戳的逐字稿只在 episode 文件的 transcript 字段保存（支持点击跳转），笔记库不重复存碎片版。
 
 ### Step 5: 报告
@@ -430,7 +447,8 @@ transcript:
 1. 音频时长和分段数
 2. 转写总字数
 3. 生成的结构化内容统计（N 个亮点、N 条金句等）
-4. 输出文件路径
+4. 输出文件路径（含 `*-x-narrative.md`）
+5. 叙事长帖字数
 
 **收尾硬校验（必做）：** 组装完 episode 文件后，运行本 skill 自带的校验脚本，错误清零才算完成（YAML 安全规则已全部固化进该脚本，不靠记忆；首次使用前先在本 skill 目录 `npm install` 安装 js-yaml）：
 

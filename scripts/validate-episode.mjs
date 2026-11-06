@@ -120,6 +120,13 @@ function validate(file) {
     if (!h.thesis || !String(h.thesis).trim()) warns.push(`highlights[${i}]「${(h.title || '').slice(0, 20)}」缺 thesis（排版规范：一句话论点，AI 从逐字稿蒸馏）`);
   });
 
+  // 规则12(软): 叙事长帖 —— 结构化笔记之外应有一篇可发 X 的中文故事；存量未补的集会告警
+  // 对照: 2026-11-06 宝玉式长帖 vs 把 highlights 发到 X，人感差一截
+  const narrative = doc.language === 'zh' ? doc.narrative : doc.narrativeZh;
+  const nlen = String(narrative ?? '').replace(/\s/g, '').length;
+  if (!nlen) warns.push(doc.language === 'zh' ? '缺 narrative（X 叙事长帖）' : '缺 narrativeZh（英文素材的中文 X 叙事长帖）');
+  else if (nlen < 800) warns.push(`叙事长帖偏短（${nlen} 字，建议 1200–2500）`);
+
   if (!Array.isArray(doc.keywords) || !doc.keywords.length) errors.push('keywords 为空');
 
   return { rel, errors, warns };
